@@ -41,14 +41,29 @@ def self_collision(self):
 
 
 def control_speed(self, speed):
+	MINIMUM_SPEED = 0.06
 
-	if(self.points > 1):
+	if(self.points > 10):
+		speed = 0.13
+	if(self.points > 20):
 		speed = 0.10
-	if(self.points > 2):
+	if(self.points > 30):
 		speed = 0.08
-	if(self.points > 3):
-		speed = 0.07
+	if(self.initial_speed < MINIMUM_SPEED):
+		self.initial_speed = MINIMUM_SPEED
 	return speed
+
+def initial_friction(initial_speed, speed):
+	
+	frame_counter = 1
+
+	if frame_counter > 0 and initial_speed >= speed:
+		initial_speed -= 0.001
+		frame_counter += 1
+
+
+	return initial_speed
+		
 
 
 

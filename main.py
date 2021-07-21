@@ -6,6 +6,7 @@ from pygame.locals import *
 SIZE = 32
 WINDOW_SIZE = (640,480)
 
+
 class Apple:
 	def __init__(self,screen):
 		self.screen = screen
@@ -137,6 +138,7 @@ class Game:
 			self.apple.y = random.randint(0,12)*SIZE
 			self.box.increase_length()
 			self.points += 1
+			self.initial_speed -=0.001
 
 
 		if e.wall_collision(self,WINDOW_SIZE):
@@ -153,6 +155,7 @@ class Game:
 	def run(self):
 		run = True
 		speed = 0.15
+		self.initial_speed = 0.18
 		
 		while run:
 			for event in pygame.event.get():
@@ -176,11 +179,14 @@ class Game:
 					run = False
 
 			self.play()
-			print(speed)
-			speed = e.control_speed(self,speed)
-			time.sleep(speed)
 			
+			speed = e.control_speed(self, speed)
+			print(e.initial_friction(self.initial_speed,speed))
+			self.initial_speed = e.initial_friction(self.initial_speed,speed)
+			time.sleep(self.initial_speed)
 
+			
+ 
 
 if __name__ == "__main__":
 
