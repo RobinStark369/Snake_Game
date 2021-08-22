@@ -37,21 +37,53 @@ class Box:
 		pygame.display.update()
 
 	def move_up(self):
-		self.direction = 'up'		
+		if self.restrict_opp_movement(self.direction, 'up'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'up'		
 
 	def move_down(self):
-		self.direction = 'down'
+		if self.restrict_opp_movement(self.direction, 'down'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'down'
 
 	def move_left(self):
-		self.direction = 'left'
+		if self.restrict_opp_movement(self.direction, 'left'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'left'
 	
 	def move_right(self):
-		self.direction = 'right'	
+		if self.restrict_opp_movement(self.direction, 'right'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'right'	
 
 	def increase_length(self):
 		self.length += 1
 		self.x.append(-1)
 		self.y.append(-1)
+
+	def restrict_opp_movement(self, current_direction, final_direction):
+		directions = {
+			'none' : 0,
+			'up' : 1,
+			'down' : -1,
+			'left' : 2,
+			'right' : -2
+		}
+	
+		if directions[current_direction] + directions[final_direction] == 0:
+			self.direction = current_direction
+			return True
+		else:
+			return False
+		
+
+		
+
+
 
 	def run(self):
 		for i in range(self.length-1,0,-1):
@@ -102,6 +134,7 @@ class Game:
 		self.box.run()
 		self.apple.draw()
 		self.display_score()
+		
 				
 		if e.apple_collision(self):
 			self.apple.x = random.randint(0,18)*SIZE
