@@ -91,6 +91,13 @@ class Game:
 		self.window.blit(score, (300,15))
 		pygame.display.flip()
 
+	def display_game_over(self):
+		font = pygame.font.Font('data/font/Roboto-Light.ttf', 75)
+		text = font.render('GAME OVER', True, (255, 255, 255))
+		self.window.blit(text, (100, 140))
+		pygame.display.update()
+
+
 	def play(self):
 		self.box.run()
 		self.apple.draw()
@@ -104,7 +111,15 @@ class Game:
 
 
 		if e.wall_collision(self,WINDOW_SIZE):
+			self.display_game_over()
+			time.sleep(2)
 			sys.exit()
+
+		if e.self_collision(self):
+			self.display_game_over()
+			time.sleep(2)
+			sys.exit()
+
 
 	def run(self):
 		run = True

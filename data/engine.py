@@ -26,6 +26,21 @@ def wall_collision(self, window_size):
 
 	return collision
 
+def self_collision(self):
+	collision = False
+	center = [16, 16]
+	head_centre = (self.box.x[0] + center[0] , self.box.y[0] + center[1])
+	for i in range(2, len(self.box.x)):
+		current_box_centre = (self.box.x[i] + center[0], self.box.y[i] + center[1])
+		
+		if(head_centre[0] == current_box_centre[0] and head_centre[1] == current_box_centre[1]):
+			collision = True
+			print('Self Collision')
+			break
+	return collision
+
+
+
 
 
 
