@@ -40,6 +40,18 @@ def self_collision(self):
 	return collision
 
 
+def control_speed(self, speed):
+
+	if(self.points > 1):
+		speed = 0.10
+	if(self.points > 2):
+		speed = 0.08
+	if(self.points > 3):
+		speed = 0.07
+	return speed
+
+
+
 
 
 

@@ -11,8 +11,8 @@ class Apple:
 		self.screen = screen
 		self.apple = pygame.image.load('data/images/apple.png').convert()
 		self.apple = pygame.transform.scale(self.apple, (32,32))
-		self.x = random.randint(0,20)*SIZE
-		self.y = random.randint(0,15)*SIZE
+		self.x = random.randint(0,19)*SIZE
+		self.y = random.randint(0,14)*SIZE
 
 	def draw(self):
 		self.screen.blit(self.apple, (self.x, self.y))
@@ -73,17 +73,13 @@ class Box:
 			'left' : 2,
 			'right' : -2
 		}
-	
+
 		if directions[current_direction] + directions[final_direction] == 0:
 			self.direction = current_direction
 			return True
 		else:
 			return False
-		
-
-		
-
-
+			
 
 	def run(self):
 		for i in range(self.length-1,0,-1):
@@ -126,7 +122,7 @@ class Game:
 	def display_game_over(self):
 		font = pygame.font.Font('data/font/Roboto-Light.ttf', 75)
 		text = font.render('GAME OVER', True, (255, 255, 255))
-		self.window.blit(text, (100, 140))
+		self.window.blit(text, (120, 150))
 		pygame.display.update()
 
 
@@ -156,7 +152,8 @@ class Game:
 
 	def run(self):
 		run = True
-
+		speed = 0.15
+		
 		while run:
 			for event in pygame.event.get():
 				self.box.draw()
@@ -174,12 +171,14 @@ class Game:
 						
 					if event.key == K_RIGHT:
 						self.box.move_right()
-						
+		
 				elif event.type == QUIT:
 					run = False
 
 			self.play()
-			time.sleep(0.15)
+			print(speed)
+			speed = e.control_speed(self,speed)
+			time.sleep(speed)
 			
 
 
