@@ -11,8 +11,8 @@ class Apple:
 		self.screen = screen
 		self.apple = pygame.image.load('data/images/apple.png').convert()
 		self.apple = pygame.transform.scale(self.apple, (32,32))
-		self.x = random.randint(0,20)*SIZE
-		self.y = random.randint(0,15)*SIZE
+		self.x = random.randint(0,19)*SIZE
+		self.y = random.randint(0,14)*SIZE
 
 	def draw(self):
 		self.screen.blit(self.apple, (self.x, self.y))
@@ -37,21 +37,49 @@ class Box:
 		pygame.display.update()
 
 	def move_up(self):
-		self.direction = 'up'		
+		if self.restrict_opp_movement(self.direction, 'up'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'up'		
 
 	def move_down(self):
-		self.direction = 'down'
+		if self.restrict_opp_movement(self.direction, 'down'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'down'
 
 	def move_left(self):
-		self.direction = 'left'
+		if self.restrict_opp_movement(self.direction, 'left'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'left'
 	
 	def move_right(self):
-		self.direction = 'right'	
+		if self.restrict_opp_movement(self.direction, 'right'):
+			print('Avoiding reverse movement')
+		else:
+			self.direction = 'right'	
 
 	def increase_length(self):
 		self.length += 1
 		self.x.append(-1)
 		self.y.append(-1)
+
+	def restrict_opp_movement(self, current_direction, final_direction):
+		directions = {
+			'none' : 0,
+			'up' : 1,
+			'down' : -1,
+			'left' : 2,
+			'right' : -2
+		}
+
+		if directions[current_direction] + directions[final_direction] == 0:
+			self.direction = current_direction
+			return True
+		else:
+			return False
+			
 
 	def run(self):
 		for i in range(self.length-1,0,-1):
@@ -91,10 +119,18 @@ class Game:
 		self.window.blit(score, (300,15))
 		pygame.display.flip()
 
+	def display_game_over(self):
+		font = pygame.font.Font('data/font/Roboto-Light.ttf', 75)
+		text = font.render('GAME OVER', True, (255, 255, 255))
+		self.window.blit(text, (120, 150))
+		pygame.display.update()
+
+
 	def play(self):
 		self.box.run()
 		self.apple.draw()
 		self.display_score()
+		
 				
 		if e.apple_collision(self):
 			self.apple.x = random.randint(0,18)*SIZE
@@ -104,11 +140,20 @@ class Game:
 
 
 		if e.wall_collision(self,WINDOW_SIZE):
+			self.display_game_over()
+			time.sleep(2)
 			sys.exit()
+
+		if e.self_collision(self):
+			self.display_game_over()
+			time.sleep(2)
+			sys.exit()
+
 
 	def run(self):
 		run = True
-
+		speed = 0.15
+		
 		while run:
 			for event in pygame.event.get():
 				self.box.draw()
@@ -126,12 +171,14 @@ class Game:
 						
 					if event.key == K_RIGHT:
 						self.box.move_right()
-						
+		
 				elif event.type == QUIT:
 					run = False
 
 			self.play()
-			time.sleep(0.15)
+			print(speed)
+			speed = e.control_speed(self,speed)
+			time.sleep(speed)
 			
 
 
