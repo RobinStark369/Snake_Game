@@ -1,16 +1,33 @@
 
+def apple_collision(self, SIZE):
+	collision = False
+	direction = self.box.direction
+	apple_pos = [self.apple.x,self.apple.y]
+	box_pos = [self.box.x[0], self.box.y[0]]
 
-def apple_collision(self):
-		collision = False
-		center = [16, 16]
-		apple_center_pos = (self.apple.x + center[0], self.apple.y + center[1])
-		box_pos = (self.box.x[0]+center[0], self.box.y[0] + center[1])
-
-		if box_pos[0] == apple_center_pos[0] and box_pos[1] == apple_center_pos[1]:
+	if direction == 'left':
+		apple_pos[0] += SIZE
+		if apple_pos == box_pos:
 			collision = True
-			print('Collision') 
+		
+	if direction == 'right':
+		box_pos[0] += SIZE
+		if apple_pos == box_pos:
+			collision = True
 
-		return collision
+	if direction == 'up':
+		apple_pos[1] += SIZE
+		if apple_pos == box_pos:
+			collision = True
+
+	if direction == 'down':
+		box_pos[1] += SIZE
+		if apple_pos == box_pos:
+			collision = True
+	
+
+	return collision
+
 
 def wall_collision(self, window_size):
 	collision = False
@@ -25,6 +42,7 @@ def wall_collision(self, window_size):
 		collision = True
 
 	return collision
+
 
 def self_collision(self):
 	collision = False
@@ -52,6 +70,7 @@ def control_speed(self, speed):
 	if(self.initial_speed < MINIMUM_SPEED):
 		self.initial_speed = MINIMUM_SPEED
 	return speed
+	
 
 def initial_friction(initial_speed, speed):
 	
@@ -64,8 +83,6 @@ def initial_friction(initial_speed, speed):
 
 	return initial_speed
 		
-
-
 
 
 
